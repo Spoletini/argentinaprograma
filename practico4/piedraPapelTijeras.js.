@@ -1,0 +1,62 @@
+const readlineSync = require('readline-sync');
+
+
+const PIEDRA = "piedra";
+const TIJERA = "tijera";
+const PAPEL = "papel";
+
+
+function obtenerJugadaComputadora() {
+  let opciones = [PIEDRA, PAPEL, TIJERA];
+  let indice = Math.floor(Math.random() * 3);
+  return opciones[indice];
+}
+
+
+function obtenerJugadaUsuario() {
+  let jugada = readlineSync.question("Elige tu jugada: piedra, papel o tijera: ").toLowerCase();
+  while (jugada !== PIEDRA && jugada !== PAPEL && jugada !== TIJERA) {
+    jugada = readlineSync.question("Jugada inválida. Elige piedra, papel o tijera: ").toLowerCase();
+  }
+  return jugada;
+}
+
+
+function determinarGanador(jugadaComputadora, jugadaUsuario) {
+  if (jugadaComputadora === jugadaUsuario) {
+    return "Empate";
+  } else if (
+    (jugadaComputadora === PIEDRA && jugadaUsuario === TIJERA) ||
+    (jugadaComputadora === PAPEL && jugadaUsuario === PIEDRA) ||
+    (jugadaComputadora === TIJERA && jugadaUsuario === PAPEL)
+  ) {
+    return "Gana la computadora";
+  } else {
+    return "Gana el usuario";
+  }
+}
+
+
+function jugarPartida() {
+  const jugadaComputadora = obtenerJugadaComputadora();
+  const jugadaUsuario = obtenerJugadaUsuario();
+  const resultado = determinarGanador(jugadaComputadora, jugadaUsuario);
+
+  console.log("La computadora eligió: " + jugadaComputadora);
+  console.log("El usuario eligió: " + jugadaUsuario);
+  console.log("El resultado fue: " + resultado);
+}
+
+
+function jugarVariasPartidas(numPartidas) {
+  for (let i = 0; i < numPartidas; i++) {
+    console.log("Partida " + (i + 1));
+    jugarPartida();
+    console.log("--------------------");
+  }
+}
+
+
+const numPartidas = parseInt(readlineSync.question("¿Cuántas partidas quieres jugar?: "));
+jugarVariasPartidas(numPartidas);
+
